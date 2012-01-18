@@ -7,11 +7,11 @@
     </ProductVersion>
     <SchemaVersion>
     </SchemaVersion>
-    <ProjectGuid>{96CD4F63-66F9-44E6-8010-BF3CEF4BA46A}</ProjectGuid>
+    <ProjectGuid>{9B143F86-B582-4BB4-9FA7-760DEE854750}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>vbox.Program</StartupObject>
-    <RootNamespace>vbox</RootNamespace>
-    <AssemblyName>vbox</AssemblyName>
+    <StartupObject>Documentation.Module1</StartupObject>
+    <RootNamespace>Documentation</RootNamespace>
+    <AssemblyName>Documentation</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -24,7 +24,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>vbox.xml</DocumentationFile>
+    <DocumentationFile>Documentation.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
@@ -34,7 +34,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>vbox.xml</DocumentationFile>
+    <DocumentationFile>Documentation.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -53,8 +53,6 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -71,7 +69,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.vb" />
+    <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -87,7 +85,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Scene.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -109,10 +106,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common_vb\Common_vb.vbproj">
-      <Project>{6696D97A-08D1-4322-BFFA-C0274D08A595}</Project>
-      <Name>Common_vb</Name>
-    </ProjectReference>
+    <Content Include="Data\DataSet.txt" />
+    <Content Include="Reflection\bookmarks.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

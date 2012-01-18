@@ -1,0 +1,21 @@
+﻿Create a simple property object using reflection.emit
+
+http://stackoverflow.com/questions/1651455/using-reflection-emit-to-create-a-class-implementing-an-interface
+
+
+# Introduction to Creating Dynamic Types
+d 2006.0306
+L http://www.codeproject.com/KB/dotnet/Creating_Dynamic_Types.aspx
+t 2012.0117
+
+# Reflection Performance
+L http://msdn.microsoft.com/en-us/magazine/cc163759.aspx
+{
+	# A Nested Record
+    > Here some Text
+	{
+	}
+}
+
+# Lightweight Code Generation
+L http://blogs.msdn.com/b/joelpob/archive/2004/03/31/105282.aspx

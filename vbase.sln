@@ -5,6 +5,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "vbox", "vbox\vbox.vbproj", 
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Common_vb", "..\Common\Common_vb\Common_vb.vbproj", "{6696D97A-08D1-4322-BFFA-C0274D08A595}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Documentation", "Documentation\Documentation.vbproj", "{9B143F86-B582-4BB4-9FA7-760DEE854750}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{6696D97A-08D1-4322-BFFA-C0274D08A595}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6696D97A-08D1-4322-BFFA-C0274D08A595}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6696D97A-08D1-4322-BFFA-C0274D08A595}.Release|x86.ActiveCfg = Release|Any CPU
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Debug|x86.ActiveCfg = Debug|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Debug|x86.Build.0 = Debug|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|Any CPU.ActiveCfg = Release|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|Mixed Platforms.Build.0 = Release|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|x86.ActiveCfg = Release|x86
+		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
