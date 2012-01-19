@@ -211,20 +211,28 @@ Module Program
         Dim bit As UInt32
         While bitPos < 32
             bit = (val >> bitPos) And &H1
-            runLength += 1
             If bit <> lastBit Then
-                If runLength < 5 Then
+                If runLength <= 4 Then
                     run = (val >> (bitPos - runLength + 1)) And bitMask(runLength)
-                    bitPos += 4 - runLength
+                    bitPos += 4 - runLength + 1
+                    If bitPos < 32 Then
+                        lastBit = (val >> bitPos) And &H1
+                        runLength = 1
+                        bitPos += 1
+                    End If
                 Else
-                    result = EncodeRun(bit, runLength) + result
+                    result = result & EncodeRun(lastBit, runLength)
+                    lastBit = bit
+                    runLength = 1
                 End If
+            Else
+                bitPos += 1
+                runLength += 1
             End If
-            bitPos += 1
         End While
+        result = result & result & EncodeRun(lastBit, runLength)
 
-
-        Return Nothing
+        Return result
     End Function
 
     Public Function bitMask(ByVal bits As Integer) As UInt32
