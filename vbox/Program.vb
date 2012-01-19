@@ -29,7 +29,11 @@ Module Program
             If (title IsNot Nothing) Then
                 GetStars(input)
                 GetNiches(input)
-                GetStudio(input)
+                line = input.ReadLine()
+                If GetDirector(line) Then
+                    line = input.ReadLine()
+                End If
+                GetStudio(line)
             End If
         End If
 
@@ -64,12 +68,31 @@ Module Program
         End If
     End Sub
 
-    Sub GetStudio(ByVal input As TextReader)
-        Dim line As String = input.ReadLine()
-        If line IsNot Nothing Then
-            studio = Regex.Replace(line, "^Studio: ", "").Trim()
+    Function GetDirector(ByVal line As String) As Boolean
+        If line IsNot Nothing AndAlso line.StartsWith("Director: ") Then
+            director = line.Replace("Director: ", "").Trim()
+            Return True
         End If
-    End Sub
+        Return False
+    End Function
+
+    Function GetStudio(ByVal line As String) As Boolean
+        If line IsNot Nothing AndAlso line.StartsWith("Studio: ") Then
+            studio = line.Replace("Studio: ", "").Trim()
+            Return True
+        End If
+        Return False
+    End Function
+
+    Function TryGetField(ByVal line As String,
+                         ByVal tag As String,
+                         ByRef field As String) As Boolean
+        If line IsNot Nothing AndAlso line.Trim.StartsWith(tag) Then
+            field = line.Replace(tag, "").Trim()
+            Return True
+        End If
+        Return False
+    End Function
 
     Function SeekPattern(ByVal input As TextReader, ByVal pattern As String)
         Dim line As String = input.ReadLine()
@@ -138,15 +161,18 @@ Module Program
             starCnt = (starCnt + 1) Mod 3
         Next
         If (newLine) Then output.WriteLine()
-        output.WriteLine("t {0}", niches)
+        ' output.WriteLine("t {0}", niches)
+        WriteList(output, "t", niches)
         output.WriteLine("s W4:vbox/{0:yyMMdd}", DateTime.Now)
         output.WriteLine()
     End Sub
 
-    Public Sub WriteList(ByVal output As TextWriter, ByVal list As String)
+    Public Sub WriteList(ByVal output As TextWriter,
+                         ByVal tag As String,
+                         ByVal list As String)
         Dim lines = FormatList(list.Split(","))
         For Each line In lines
-            output.WriteLine("> {0}", line)
+            output.WriteLine("{1} {0}", line, tag)
         Next
     End Sub
 
@@ -176,4 +202,38 @@ Module Program
         Return sceneList.Sum(Function(h) h.Minutes)
     End Function
 
+    Private Function Encode(ByVal val As UInt32) As String
+        Dim result As String = String.Empty
+        Dim lastBit As UInt32 = val And &H1
+        Dim run As UInt32
+        Dim runLength = 1
+        Dim bitPos As Integer = 1
+        Dim bit As UInt32
+        While bitPos < 32
+            bit = (val >> bitPos) And &H1
+            runLength += 1
+            If bit <> lastBit Then
+                If runLength < 5 Then
+                    run = (val >> (bitPos - runLength + 1)) And bitMask(runLength)
+                    bitPos += 4 - runLength
+                Else
+                    result = EncodeRun(bit, runLength) + result
+                End If
+            End If
+            bitPos += 1
+        End While
+
+
+        Return Nothing
+    End Function
+
+    Public Function bitMask(ByVal bits As Integer) As UInt32
+        Return Math.Pow(2, bits) - 1
+    End Function
+
+    Private Function EncodeRun(ByVal bit As UInteger, ByVal runLength As Integer) As String
+        Throw New NotImplementedException
+    End Function
+
 End Module
+
