@@ -1,0 +1,20 @@
+
+NAC encoding:
+
+        0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+Base 30 0 1 2 3 4 5 6 7 8 9  B  C  D  F  G 
+  
+Decimal 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 
+Base 30  H  J  K  L  M  N  P  Q  R  S  T  V  W  X  Z 
+
+alphabet=
+0123456789BCDFGHJKLMNPQRSTVWXZ
+
+
+0123456789ABCDEF
+ghijklmnopqrstuv
+GHIJKLMNOPQRSTUV
+
+What happens if the last few verbatim bits aren't a whole nibble
+
+0x1000_0000
