@@ -7,6 +7,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Common_vb", "..\Common\Comm
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Documentation", "Documentation\Documentation.vbproj", "{9B143F86-B582-4BB4-9FA7-760DEE854750}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common_cs", "..\Common\Common_cs\Common_cs.csproj", "{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|Mixed Platforms.Build.0 = Release|x86
 		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|x86.ActiveCfg = Release|x86
 		{9B143F86-B582-4BB4-9FA7-760DEE854750}.Release|x86.Build.0 = Release|x86
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9BB4E144-7646-4583-B4BB-C7E3709C1EBF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

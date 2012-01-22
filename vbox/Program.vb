@@ -2,6 +2,7 @@
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Common_vb.My.Collections
+Imports System.Diagnostics
 
 Module Program
     Dim title As String
@@ -15,6 +16,22 @@ Module Program
     Dim nicheFile As String = "C:\Data\niche.txt"
 
     Sub Main()
+        Dim input As UInt32
+        While (1)
+            Console.Write("Input a number: ")
+            Dim line As String = Console.ReadLine()
+            Try
+                input = UInt32.Parse(line, System.Globalization.NumberStyles.HexNumber)
+
+            Catch ex As Exception
+
+                Console.WriteLine("Failed to parse number")
+            End Try
+            Console.WriteLine(Encode(input))
+        End While
+    End Sub
+
+    Sub vbox()
         nicheTable = New CountingDictionary(100)
         nicheTable.Load(nicheFile)
         ProcessInput(Console.In)
@@ -211,26 +228,42 @@ Module Program
         Dim bit As UInt32
         While bitPos < 32
             bit = (val >> bitPos) And &H1
-            If bit <> lastBit Then
-                If runLength <= 4 Then
-                    run = (val >> (bitPos - runLength + 1)) And bitMask(runLength)
-                    bitPos += 4 - runLength + 1
-                    If bitPos < 32 Then
-                        lastBit = (val >> bitPos) And &H1
-                        runLength = 1
-                        bitPos += 1
-                    End If
-                Else
-                    result = result & EncodeRun(lastBit, runLength)
-                    lastBit = bit
-                    runLength = 1
+            If bit = lastBit Then
+                If bitPos = 31 Then
+                    Return result & EncodeRun(lastBit, runLength + 1)
                 End If
-            Else
+                ' The run may continue...
                 bitPos += 1
                 runLength += 1
+            Else
+                ' This bit starts a new run, endin the previous run
+                If runLength <= 4 Then
+                    If (bitPos <= 28) Then
+                        Dim shift As Integer = CInt((bitPos / 4)) * 4
+                        run = (val >> shift) And &HF
+                        result = result & String.Format("{0:x}", run)
+                        bitPos = shift + 5
+                        If bitPos < 32 Then
+                            lastBit = (val >> bitPos) And &H1
+                            runLength = 1
+                            bitPos += 1
+                        End If
+                    Else
+                        ' Get the last few verbatim bits.
+                        Dim mask = bitMask(32 - bitPos)
+                        run = (val >> bitPos) & mask
+                        result = result & String.Format("{0:x}", run)
+                        Return result
+                    End If
+                Else
+                    result &= EncodeRun(lastBit, runLength)
+                    lastBit = bit
+                    runLength = 1
+                    bitPos += 1
+                End If
             End If
         End While
-        result = result & result & EncodeRun(lastBit, runLength)
+        result &= EncodeRun(lastBit, runLength)
 
         Return result
     End Function
@@ -239,8 +272,44 @@ Module Program
         Return Math.Pow(2, bits) - 1
     End Function
 
-    Private Function EncodeRun(ByVal bit As UInteger, ByVal runLength As Integer) As String
-        Throw New NotImplementedException
+    'Private Function EncodeRun(ByVal run As UInteger,
+    '                           ByVal runLength As Integer) As String
+    '    Dim result As String
+    '    If runLength <= 4 Then
+    '        Debug.Assert(run <= bitMask(runLength))
+    '        result = String.Format("{0:x}", run)
+    '    Else
+    '        Debug.Assert(run = 0 OrElse run = 1)
+    '        result = EncodeRun(run = 1, String.Format("{0:x}", runLength))
+    '    End If
+
+    '    Return result
+
+    'End Function
+
+    Private debug = True
+
+    Private Function EncodeRun(ByVal bit As Integer, ByVal runLength As Integer) As String
+        If (debug) Then
+            Return String.Format("[{0}:{1}]", bit, runLength)
+        End If
+
+        If runLength = 0 Then Return String.Empty
+
+        Dim result As New StringBuilder(32)
+        Dim hexrun As String = String.Format("{0:x}", runLength)
+        Dim start As Integer = If(bit = 1, Asc("G"), Asc("g"))
+        For Each digit As Char In hexrun
+            Dim val As Integer
+            If (digit >= "0" AndAlso digit <= "9") Then
+                val = Asc(digit) - Asc("0")
+            End If
+            If (digit >= "a" AndAlso digit <= "f") Then
+                val = 10 + Asc(digit) - Asc("a")
+            End If
+            result.Append(Chr(start + val))
+        Next
+        Return result.ToString()
     End Function
 
 End Module
