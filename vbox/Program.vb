@@ -223,6 +223,7 @@ Module Program
         Dim result As String = String.Empty
         Dim lastBit As UInt32 = val And &H1
         Dim run As UInt32
+        Dim runStart = 0
         Dim runLength = 1
         Dim bitPos As Integer = 1
         Dim bit As UInt32
@@ -233,30 +234,32 @@ Module Program
                 runLength += 1
                 bitPos += 1
             Else
-                ' This bit starts a new run, ending the previous run
-                If runLength >= 5 Then
-                    ' Encode current run length.
+                ' This bit starts a new run, ending the previous run.
+                If runLength > 4 Then
+                    ' Encode the current run length.
                     result &= EncodeRun(lastBit, runLength)
                     lastBit = bit
+                    runStart = bitPos
                     runLength = 1
                     bitPos += 1
                 Else
-                    ' Encode a verbatim nibble.
-                    If (bitPos <= 28) Then
-                        Dim shift As Integer = CInt((bitPos / 4)) * 4
+                    If (runStart <= 28) Then
+                        ' Encode the next 4 bits as a verbatim nibble
+                        Dim shift = runStart
                         run = (val >> shift) And &HF
                         result &= String.Format("{0:x}", run)
-                        bitPos = shift + 4
+                        runStart = runStart + 4
+                        runLength = 0
+                        bitPos = runStart
                         If bitPos < 32 Then
                             lastBit = (val >> bitPos) And &H1
                             runLength = 1
                             bitPos += 1
-                        Else
                         End If
                     Else
-                        ' Get the last few verbatim bits.
-                        Dim mask = bitMask(32 - bitPos)
-                        run = (val >> bitPos) & mask
+                        ' Encode the few bits verbatim
+                        Dim mask = bitMask(32 - runStart)
+                        run = (val >> runStart) & mask
                         result = result & String.Format("{0:x}", run)
                         Return result
                     End If
