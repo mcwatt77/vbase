@@ -229,24 +229,29 @@ Module Program
         While bitPos < 32
             bit = (val >> bitPos) And &H1
             If bit = lastBit Then
-                If bitPos = 31 Then
-                    Return result & EncodeRun(lastBit, runLength + 1)
-                End If
-                ' The run may continue...
-                bitPos += 1
+                ' The run continues.
                 runLength += 1
+                bitPos += 1
             Else
-                ' This bit starts a new run, endin the previous run
-                If runLength <= 4 Then
+                ' This bit starts a new run, ending the previous run
+                If runLength >= 5 Then
+                    ' Encode current run length.
+                    result &= EncodeRun(lastBit, runLength)
+                    lastBit = bit
+                    runLength = 1
+                    bitPos += 1
+                Else
+                    ' Encode a verbatim nibble.
                     If (bitPos <= 28) Then
                         Dim shift As Integer = CInt((bitPos / 4)) * 4
                         run = (val >> shift) And &HF
-                        result = result & String.Format("{0:x}", run)
-                        bitPos = shift + 5
+                        result &= String.Format("{0:x}", run)
+                        bitPos = shift + 4
                         If bitPos < 32 Then
                             lastBit = (val >> bitPos) And &H1
                             runLength = 1
                             bitPos += 1
+                        Else
                         End If
                     Else
                         ' Get the last few verbatim bits.
@@ -255,11 +260,6 @@ Module Program
                         result = result & String.Format("{0:x}", run)
                         Return result
                     End If
-                Else
-                    result &= EncodeRun(lastBit, runLength)
-                    lastBit = bit
-                    runLength = 1
-                    bitPos += 1
                 End If
             End If
         End While
