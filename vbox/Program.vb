@@ -1,8 +1,12 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
-Imports Common_vb.My.Collections
 Imports System.Diagnostics
+Imports System.Runtime.CompilerServices
+
+Imports MyVb
+Imports MyVb.Collections
+
 
 Module Program
     Dim title As String
@@ -16,6 +20,7 @@ Module Program
     Dim nicheFile As String = "C:\Data\niche.txt"
 
     Sub Main()
+        Console.WriteLine("IsLittleEndian: {0}", BitConverter.IsLittleEndian)
         Dim input As UInt32
         While (1)
             Console.Write("Input a number: ")
@@ -24,10 +29,27 @@ Module Program
                 input = UInt32.Parse(line, System.Globalization.NumberStyles.HexNumber)
 
             Catch ex As Exception
-
                 Console.WriteLine("Failed to parse number")
             End Try
+            Dim bytes As Byte() = BitConverter.GetBytes(input)
+            For Each b In bytes
+            Next
+
+            Dim bits As BitArray = New BitArray(bytes)
+            Dim encoded As String = bits.RLEncode()
+            Console.WriteLine(encoded)
+            Dim decoded As BitArray = bits.RLDecode(encoded)
+            Console.WriteLine(decoded.ToHex())
+            Console.WriteLine(decoded.ToBinary())
+
+
+
+            For Each b In bits
+                Console.Write("{0}", If(b, 1, 0))
+            Next
+            Console.WriteLine()
             Console.WriteLine(Encode(input))
+            'Console.WriteLine(bits.RLEncode(
         End While
     End Sub
 
@@ -219,6 +241,7 @@ Module Program
         Return sceneList.Sum(Function(h) h.Minutes)
     End Function
 
+
     Private Function Encode(ByVal val As UInt32) As String
         Dim result As String = String.Empty
         Dim lastBit As UInt32 = val And &H1
@@ -259,7 +282,7 @@ Module Program
                     Else
                         ' Encode the few bits verbatim
                         Dim mask = bitMask(32 - runStart)
-                        run = (val >> runStart) & mask
+                        run = (val >> runStart) And mask
                         result = result & String.Format("{0:x}", run)
                         Return result
                     End If
@@ -291,6 +314,7 @@ Module Program
     'End Function
 
     Private debug = True
+
 
     Private Function EncodeRun(ByVal bit As Integer, ByVal runLength As Integer) As String
         If (debug) Then
