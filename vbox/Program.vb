@@ -20,37 +20,7 @@ Module Program
     Dim nicheFile As String = "C:\Data\niche.txt"
 
     Sub Main()
-        Console.WriteLine("IsLittleEndian: {0}", BitConverter.IsLittleEndian)
-        Dim input As UInt32
-        While (1)
-            Console.Write("Input a number: ")
-            Dim line As String = Console.ReadLine()
-            Try
-                input = UInt32.Parse(line, System.Globalization.NumberStyles.HexNumber)
-
-            Catch ex As Exception
-                Console.WriteLine("Failed to parse number")
-            End Try
-            Dim bytes As Byte() = BitConverter.GetBytes(input)
-            For Each b In bytes
-            Next
-
-            Dim bits As BitArray = New BitArray(bytes)
-            Dim encoded As String = bits.RLEncode()
-            Console.WriteLine(encoded)
-            Dim decoded As BitArray = bits.RLDecode(encoded)
-            Console.WriteLine(decoded.ToHex())
-            Console.WriteLine(decoded.ToBinary())
-
-
-
-            For Each b In bits
-                Console.Write("{0}", If(b, 1, 0))
-            Next
-            Console.WriteLine()
-            Console.WriteLine(Encode(input))
-            'Console.WriteLine(bits.RLEncode(
-        End While
+        vbox()
     End Sub
 
     Sub vbox()
@@ -200,7 +170,6 @@ Module Program
             starCnt = (starCnt + 1) Mod 3
         Next
         If (newLine) Then output.WriteLine()
-        ' output.WriteLine("t {0}", niches)
         WriteList(output, "t", niches)
         output.WriteLine("s W4:vbox/{0:yyMMdd}", DateTime.Now)
         output.WriteLine()
@@ -239,104 +208,6 @@ Module Program
 
     Private Function SceneTotal() As Integer
         Return sceneList.Sum(Function(h) h.Minutes)
-    End Function
-
-
-    Private Function Encode(ByVal val As UInt32) As String
-        Dim result As String = String.Empty
-        Dim lastBit As UInt32 = val And &H1
-        Dim run As UInt32
-        Dim runStart = 0
-        Dim runLength = 1
-        Dim bitPos As Integer = 1
-        Dim bit As UInt32
-        While bitPos < 32
-            bit = (val >> bitPos) And &H1
-            If bit = lastBit Then
-                ' The run continues.
-                runLength += 1
-                bitPos += 1
-            Else
-                ' This bit starts a new run, ending the previous run.
-                If runLength > 4 Then
-                    ' Encode the current run length.
-                    result &= EncodeRun(lastBit, runLength)
-                    lastBit = bit
-                    runStart = bitPos
-                    runLength = 1
-                    bitPos += 1
-                Else
-                    If (runStart <= 28) Then
-                        ' Encode the next 4 bits as a verbatim nibble
-                        Dim shift = runStart
-                        run = (val >> shift) And &HF
-                        result &= String.Format("{0:x}", run)
-                        runStart = runStart + 4
-                        runLength = 0
-                        bitPos = runStart
-                        If bitPos < 32 Then
-                            lastBit = (val >> bitPos) And &H1
-                            runLength = 1
-                            bitPos += 1
-                        End If
-                    Else
-                        ' Encode the few bits verbatim
-                        Dim mask = bitMask(32 - runStart)
-                        run = (val >> runStart) And mask
-                        result = result & String.Format("{0:x}", run)
-                        Return result
-                    End If
-                End If
-            End If
-        End While
-        result &= EncodeRun(lastBit, runLength)
-
-        Return result
-    End Function
-
-    Public Function bitMask(ByVal bits As Integer) As UInt32
-        Return Math.Pow(2, bits) - 1
-    End Function
-
-    'Private Function EncodeRun(ByVal run As UInteger,
-    '                           ByVal runLength As Integer) As String
-    '    Dim result As String
-    '    If runLength <= 4 Then
-    '        Debug.Assert(run <= bitMask(runLength))
-    '        result = String.Format("{0:x}", run)
-    '    Else
-    '        Debug.Assert(run = 0 OrElse run = 1)
-    '        result = EncodeRun(run = 1, String.Format("{0:x}", runLength))
-    '    End If
-
-    '    Return result
-
-    'End Function
-
-    Private debug = True
-
-
-    Private Function EncodeRun(ByVal bit As Integer, ByVal runLength As Integer) As String
-        If (debug) Then
-            Return String.Format("[{0}:{1}]", bit, runLength)
-        End If
-
-        If runLength = 0 Then Return String.Empty
-
-        Dim result As New StringBuilder(32)
-        Dim hexrun As String = String.Format("{0:x}", runLength)
-        Dim start As Integer = If(bit = 1, Asc("G"), Asc("g"))
-        For Each digit As Char In hexrun
-            Dim val As Integer
-            If (digit >= "0" AndAlso digit <= "9") Then
-                val = Asc(digit) - Asc("0")
-            End If
-            If (digit >= "a" AndAlso digit <= "f") Then
-                val = 10 + Asc(digit) - Asc("a")
-            End If
-            result.Append(Chr(start + val))
-        Next
-        Return result.ToString()
     End Function
 
 End Module
