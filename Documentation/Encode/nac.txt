@@ -1,5 +1,5 @@
 
-NAC encoding:
+NAC encoding (base 30, no vowels)
 
         0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
 Base 30 0 1 2 3 4 5 6 7 8 9  B  C  D  F  G 
@@ -12,9 +12,5 @@ alphabet=
 
 
 0123456789ABCDEF
-ghijklmnopqrstuv
-GHIJKLMNOPQRSTUV
-
-What happens if the last few verbatim bits aren't a whole nibble
-
-0x1000_0000
+ghijklmnopqrstuv   (base 16, offset g)   -- encodes a 0 run
+GHIJKLMNOPQRSTUV                         -- encodes a 1 run
