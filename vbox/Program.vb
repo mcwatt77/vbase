@@ -23,6 +23,20 @@ Module Program
         vbox()
     End Sub
 
+    Sub Test()
+        Console.Write("Input Date: ")
+        Dim input As String = Console.ReadLine()
+        While (input <> "quit")
+            Dim theDate As DateTime
+            If DateTime.TryParse(input, theDate) Then
+                Console.WriteLine("Date: {0}", theDate)
+            Else
+                Console.WriteLine("Failed to parse date:  {0}", input)
+            End If
+            input = Console.ReadLine()
+        End While
+    End Sub
+
     Sub vbox()
         nicheTable = New CountingDictionary(100)
         nicheTable.Load(nicheFile)
@@ -152,7 +166,7 @@ Module Program
         For Each scene In sceneList
             output.WriteLine("X <{0}> {1} [{2}]",
                              scene.SceneNumber, scene.SceneText, scene.Length)
-            ' WriteList(output, scene.NicheText)
+            WriteSceneNiches(output, scene)
         Next
         Dim starCnt = 0
         Dim newLine As Boolean = False
@@ -182,6 +196,15 @@ Module Program
         For Each line In lines
             output.WriteLine("{1} {0}", line, tag)
         Next
+    End Sub
+
+    Public Sub WriteSceneNiches(ByVal output As TextWriter, scene As Scene)
+        Dim line As List(Of String) = FormatList(scene.NicheText.Split(","))
+        Dim index As Integer = 0
+        While index < line.Count
+            output.WriteLine("> {0}{1}", line(index), If(index + 1 < line.Count, ", _", String.Empty))
+            index += 1
+        End While
     End Sub
 
     Public Function FormatList(ByVal list As IEnumerable(Of String), _
