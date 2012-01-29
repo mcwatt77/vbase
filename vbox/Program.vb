@@ -199,10 +199,10 @@ Module Program
     End Sub
 
     Public Sub WriteSceneNiches(ByVal output As TextWriter, scene As Scene)
-        Dim line As List(Of String) = FormatList(scene.NicheText.Split(","))
+        Dim line As List(Of String) = FormatList(scene.NicheText.ToLower().Split(","))
         Dim index As Integer = 0
         While index < line.Count
-            output.WriteLine("> {0}{1}", line(index), If(index + 1 < line.Count, ", _", String.Empty))
+            output.WriteLine("-  {0}{1}", line(index), If(index + 1 < line.Count, ", _", String.Empty))
             index += 1
         End While
     End Sub
